@@ -6,7 +6,7 @@
     <title>Client</title>
 </head>
 <body>
-<form action="idex.php" method="get">
+<form action="../index.php" method="get">
         <button type="submit" style="color: white; background-color:rgba(10, 155, 0, 0.5); padding: 10px;">retour</button>
 </form>
 <?php
@@ -36,11 +36,9 @@
 
 echo "<h2>Formulaire de insertion</h2>";
 
-
-
-
 ?>
-<form method="post" >
+
+<form action="inserer.php"method="post" >
     <label for="nom">Matrecule :</label>
     <input type="number" name="mat" pattern="\d{12}" placeholder="anne de bac + matrcule" required><br>
 

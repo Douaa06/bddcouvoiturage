@@ -6,7 +6,7 @@
     <title>Trajet</title>
 </head>
 <body>
-<form action="idex.php" method="get">
+<form action="../index.php" method="get">
         <button type="submit" style="color: white; background-color:rgba(10, 155, 0, 0.5); padding: 10px;">retour</button>
 </form>
 <?php
@@ -29,8 +29,8 @@
 echo "<h2>Formulaire d insertion</h2>";
 
 
- 
- 
+$conn.close();
+?> 
 
 </body>
 </html>

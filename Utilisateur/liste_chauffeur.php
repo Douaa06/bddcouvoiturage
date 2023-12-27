@@ -9,7 +9,7 @@
 
 <body>
 
-<form action="idex.php" method="get">
+<form action="../index.php" method="get">
         <button type="submit" style="color: white; background-color:rgba(10, 155, 0, 0.5); padding: 10px;">retour</button>
 </form>
      <?php
