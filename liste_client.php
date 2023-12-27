@@ -34,7 +34,7 @@
     echo "Aucun résultat trouvé dans la table.";
 }
 
-echo "<h2>Formulaire d insertion</h2>";
+echo "<h2>Formulaire de insertion</h2>";
 
 
 
