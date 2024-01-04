@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-<body>
-<a href="utilisateur/liste_chauffeur.php">liste chauffeure</a></br>
-<a href="utilisateur/liste_client.php">client</a></br>
-<a href="liste_reservation.php">reservation</a></br>
-<a href="trajet/liste_trajet.php">trajet</a></br>
+<?php 
+header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-</body>
-</html>
+ $host='localhost';
+ $user='root';
+ $pass='';
+ $db='couvoiturage';
+ $conn = new mysqli($host, $user, $pass, $db);
+ if ($conn->connect_error)  die('Error : ('.mysqli_connect_errno().')'.mysqli_connect_error());
+

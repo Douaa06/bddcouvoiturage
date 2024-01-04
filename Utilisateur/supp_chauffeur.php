@@ -7,6 +7,6 @@
  $ID = $_GET['id'];
 mysqli_query($conn, "DELETE FROM utilisateur WHERE Matrecule=$ID");
 header ('location: liste_chauffeur.php');
-$conn.close();
+$conn->close();
  ?>
                    I
