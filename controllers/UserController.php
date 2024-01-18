@@ -37,4 +37,12 @@ class UserController
         $user = $db->query($sql);
         return $user->num_rows > 0;
     }
+
+    public static function userExist($userID)
+    {
+        $db = Database::getInstance();
+        $sql = "SELECT * FROM utilisateur WHERE id = $userID";
+        $user = $db->query($sql);
+        return $user->num_rows > 0;
+    }
 }
