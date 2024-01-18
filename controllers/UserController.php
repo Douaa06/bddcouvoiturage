@@ -9,6 +9,7 @@ class UserController
     public static function authenticate($email, $password)
     {
         $db = Database::getInstance();
+        $password =  password_hash($password, PASSWORD_DEFAULT);
         $sql = "SELECT * FROM utilisateur WHERE email = '$email' AND password = '$password'";
         $user = $db->query($sql);
         return $user->num_rows > 0;
