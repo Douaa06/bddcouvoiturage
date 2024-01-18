@@ -6,7 +6,7 @@
     <title>Client</title>
 </head>
 <body>
-<form action="../index.php" method="get">
+<form action="../home.php" method="get">
         <button type="submit" style="color: white; background-color:rgba(10, 155, 0, 0.5); padding: 10px;">retour</button>
 </form>
 <?php

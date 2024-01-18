@@ -1,36 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trajet</title>
-</head>
-<body>
-<form action="../index.php" method="get">
-        <button type="submit" style="color: white; background-color:rgba(10, 155, 0, 0.5); padding: 10px;">retour</button>
-</form>
 <?php
- $host='localhost';
- $user='root';
- $pass='';
- $db='couvoiturage';
- $conn=mysqli_connect($host, $user, $pass, $db);
- $r = mysqli_query($conn, 'select * from trajet');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
+$host = 'localhost';
+$user = 'root';
+$pass = '';
+$db = 'couvoiturage';
+$conn = mysqli_connect($host, $user, $pass, $db);
 
- if ($r->num_rows > 0) {
-    echo "<h1>Les chauffeur:</h1>";
-    while ($row = $r->fetch_assoc()) {
-        echo  "</br> ".$row["Nom"]."</t> ". $row["Prenom"] ;
+$r = mysqli_query($conn, 'select * from trajet');
+
+// Set the header to indicate JSON response
+header('Content-Type: application/json');
+
+if ($r->num_rows > 0) {
+    $trajets = array();
+
+    while ($row = mysqli_fetch_assoc($r)) {
+        $trajets[] = $row;
     }
+
+    echo json_encode($trajets);
 } else {
-    echo "Aucun résultat trouvé dans la table.";
+    echo json_encode(array("message" => "Aucun résultat trouvé dans la table."));
 }
-echo "<h2>Formulaire d insertion</h2>";
 
-
-$conn.close();
-?> 
-
-</body>
-</html>
+mysqli_close($conn);
+?>
