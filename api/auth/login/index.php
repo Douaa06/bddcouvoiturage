@@ -14,12 +14,18 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
+    if(!UserController::emailExist($email)) {
+        http_response_code(400);
+        echo json_encode(['message' => 'E-mail does not exist', 'success' => false]);
+        return;
+    }
+
     if(UserController::authenticate($email, $password)) {
         http_response_code(200);
         echo json_encode(['message' => 'Login successful', 'success' => true]);
     } else {
         http_response_code(401);
-        echo json_encode(['message' => 'Login failed', 'success' => false]);
+        echo json_encode(['message' => 'Wrong Password', 'success' => false]);
     }
 } else {
     http_response_code(403);

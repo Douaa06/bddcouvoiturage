@@ -9,14 +9,14 @@ class UserController
     public static function authenticate($email, $password)
     {
         $db = Database::getInstance();
-        $password =  password_hash($password, PASSWORD_DEFAULT);
-        $sql = "SELECT * FROM utilisateur WHERE email = '$email' AND password = '$password'";
-        $user = $db->query($sql);
-        return $user->num_rows > 0;
+        $sql = "SELECT password FROM utilisateur WHERE email = '$email'";
+        $user = $db->query($sql)->fetch_assoc();
+        return password_verify($password, $user['password']);
     }
 
     public static function createUser($nom, $prenom, $email, $password, $telephone)
     {
+        $password = password_hash($password, PASSWORD_DEFAULT);
         $db = Database::getInstance();
         $sql = "INSERT INTO utilisateur (nom, prenom, email, password, telephone) VALUES ('$nom', '$prenom', '$email', '$password', $telephone)";
         return $db->query($sql);

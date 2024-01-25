@@ -55,9 +55,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         return;
     }
 
-    // Securing password:
-    $password = password_hash($password, PASSWORD_DEFAULT);
-
     if(UserController::createUser($firstname, $lastname, $email, $password, $telephone)) {
         http_response_code(200);
         echo json_encode(['message' => 'Signup successful', 'success' => true]);
