@@ -1,5 +1,5 @@
 <?php
-require_once '../../../utils/autoload.php';
+require_once $_SERVER["DOCUMENT_ROOT"] . '/utils/autoload.php';
 use Controllers\UserController;
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {

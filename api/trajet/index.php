@@ -1,5 +1,6 @@
 <?php
-require_once '../../utils/autoload.php';
+require_once $_SERVER["DOCUMENT_ROOT"] . '/utils/autoload.php';
+require_once $_SERVER["DOCUMENT_ROOT"] . '/utils/authMiddleware.php';
 
 use Controllers\CommuneController;
 use Controllers\TrajetController;
@@ -7,7 +8,6 @@ use Controllers\UserController;
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     //Checking if parameters are set
-    print_r($_POST);
     $params = ['chauffeur', 'commune_depart', 'commune_arrive', 'date_depart', 'heure_depart', 'hebdomadaire', 'nbr_place'];
     foreach ($params as $param) {
         if (empty($_POST[$param])) {
