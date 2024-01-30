@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER["DOCUMENT_ROOT"] . '/utils/autoload.php';
-require_once $_SERVER["DOCUMENT_ROOT"] . '/vendor/autoload.php';
+require_once '../../../utils/autoload.php';
+require_once '../../../vendor/autoload.php';
 use Controllers\UserController;
 use Firebase\JWT\JWT;
 use Dotenv\Dotenv;
@@ -26,12 +26,21 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         return;
     }
 
+    $user = UserController::getUserByEmail($email);
+
     if(UserController::authenticate($email, $password)) {
         $payload = [
             'iat' => time(),
             'iss' => 'dev.covoiturage.com',
             'exp' => time() + (60*60*24), // token valid for 1 day
-            'email' => $email
+            'user_info' => [
+                'id' => $user['id'],
+                'nom' => $user['Nom'],
+                'prenom' => $user['Prenom'],
+                'email' => $user['Email'],
+                'telephone' => $user['Telephone'],
+                'role' => $user['Admin']
+            ]
         ];
         $jwt = JWT::encode($payload, $_ENV['JWT_SECRET'], 'HS256');
         http_response_code(200);

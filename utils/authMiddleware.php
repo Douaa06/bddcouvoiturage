@@ -23,6 +23,12 @@ try {
     exit;
 }
 
+function getDecodedToken(): ?object
+{
+    global $decoded;
+    return $decoded;
+}
+
 function getAuthorizationHeader(): ?string
 {
     $headers = null;
