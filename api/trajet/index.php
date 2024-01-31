@@ -1,4 +1,9 @@
 <?php
+// Enable CORS
+header("Access-Control-Allow-Origin: http://localhost:4200");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Credentials: true");
 require_once '../../utils/autoload.php';
 require_once  '../../utils/authMiddleware.php';
 
@@ -6,7 +11,8 @@ use Controllers\CommuneController;
 use Controllers\TrajetController;
 use Controllers\UserController;
 
-if($_SERVER['REQUEST_METHOD'] === 'POST') {
+$method = $_SERVER['REQUEST_METHOD'];
+if($method === 'POST') {
     //Checking if parameters are set
     $params = ['chauffeur', 'commune_depart', 'commune_arrive', 'date_depart', 'heure_depart', 'hebdomadaire', 'nbr_place'];
     foreach ($params as $param) {
@@ -65,6 +71,28 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         http_response_code(401);
         echo json_encode(['message' => 'Failed to insert Trajet', 'success' => false]);
+    }
+} else if ($method === 'GET') {
+    $decoded = getDecodedToken();
+    $user_id = $decoded->user_info->id;
+    $trajets = TrajetController::getTrajetsByUser($user_id);
+    echo json_encode($trajets);
+} else if ($method === 'DELETE') {
+    $decoded = getDecodedToken();
+    $user_id = $decoded->user_info->id;
+    $trajet_id = $_GET['id'];
+    //check if exists
+    if (!TrajetController::trajetExist($trajet_id)) {
+        http_response_code(400);
+        echo json_encode(['message' => 'Trajet does not exists', 'success' => false]);
+        return;
+    }
+    if (TrajetController::deleteTrajet($trajet_id, $user_id)) {
+        http_response_code(200);
+        echo json_encode(['message' => 'Trajet deleted successfully', 'success' => true]);
+    } else {
+        http_response_code(401);
+        echo json_encode(['message' => 'Failed to delete Trajet', 'success' => false]);
     }
 } else {
     http_response_code(403);
