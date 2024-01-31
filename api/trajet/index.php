@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER["DOCUMENT_ROOT"] . '/utils/autoload.php';
-require_once $_SERVER["DOCUMENT_ROOT"] . '/utils/authMiddleware.php';
+//require_once $_SERVER["DOCUMENT_ROOT"] . '/utils/authMiddleware.php';
 
 use Controllers\CommuneController;
 use Controllers\TrajetController;

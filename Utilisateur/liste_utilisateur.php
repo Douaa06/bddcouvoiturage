@@ -9,22 +9,21 @@ $pass = '';
 $db = 'couvoiturage';
 $conn = mysqli_connect($host, $user, $pass, $db);
 
-$r = mysqli_query($conn, 'select * from wilaya');
+$r = mysqli_query($conn, 'select * from utilisateur');
 
 // Set the header to indicate JSON response
 header('Content-Type: application/json');
 
 if ($r->num_rows > 0) {
-    $wilayas = array();
+    $utilisateurs = array();
 
     while ($row = mysqli_fetch_assoc($r)) {
-        $wilayas[] = $row;
+        $utilisateurs[] = $row;
     }
 
-    echo json_encode($wilayas);
+    echo json_encode($utilisateurs);
 } else {
     echo json_encode(array("message" => "Aucun résultat trouvé dans la table."));
 }
-
 mysqli_close($conn);
 ?>

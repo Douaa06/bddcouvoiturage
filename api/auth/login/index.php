@@ -4,8 +4,20 @@ require_once $_SERVER["DOCUMENT_ROOT"] . '/vendor/autoload.php';
 use Controllers\UserController;
 use Firebase\JWT\JWT;
 use Dotenv\Dotenv;
+// En-têtes CORS
+header("Access-Control-Allow-Origin: http://localhost:4200");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Credentials: true");
+
+// Gestion des pré-vérifications CORS (OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit();
+}
 
 $dotenv = Dotenv::createImmutable($_SERVER["DOCUMENT_ROOT"]);
+
 $dotenv->load();
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -34,6 +46,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             'email' => $email
         ];
         $jwt = JWT::encode($payload, $_ENV['JWT_SECRET'], 'HS256');
+    //  print_r(json_decode(base64_decode(str_replace('_', '/', str_replace('-','+',explode('.', $jwt)[1])))));
+
+
         http_response_code(200);
         echo json_encode(['message' => 'Login successful', 'success' => true, 'token' => $jwt]);
     } else {

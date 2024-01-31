@@ -19,7 +19,7 @@
  $db='couvoiturage';
  $conn=mysqli_connect($host, $user, $pass, $db);
  $ID= $_GET['id'];
- $up = mysqli_query($conn, "select * from utilisateur WHERE Matrecule=$ID");
+ $up = mysqli_query($conn, "select * from utilisateur WHERE id=$ID");
  $data = mysqli_fetch_array($up);
 
 
@@ -32,7 +32,7 @@ echo "<h2>Modifier </h2>";
 ?>
 <form method="post" >
     <label for="nom">Matrecule :</label>
-    <input type="number" name="mat" pattern="\d{12}" value="<?php echo $data['Matrecule']?>" required><br>
+    <input type="number" name="mat" pattern="\d{12}" value="<?php echo $data['id']?>" required><br>
 
     <label for="nom">Nom :</label>
     <input type="text" name="nom" value="<?php echo $data['Nom']?>"required><br>
