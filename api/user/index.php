@@ -1,28 +1,42 @@
 <?php
 require_once '../../utils/autoload.php';
-require_once  '../../utils/authMiddleware.php';
 
 use Controllers\UserController;
 
 $method = $_SERVER['REQUEST_METHOD'];
+$data = json_decode(file_get_contents('php://input'), true);
+
 if($method === 'GET') {
-    $decoded = getDecodedToken();
-    echo json_encode($decoded->user_info);
-} else if ($method === 'POST') {
-    $params = ['firstname', 'lastname', 'email', 'telephone', 'password'];
+    if (empty($_GET['id'])) {
+        http_response_code(400);
+        echo json_encode(['message' => 'Bad Request', 'success' => false]);
+        return;
+    }
+    $user_id = htmlspecialchars($_GET['id']);
+    if (!UserController::userExist($user_id)) {
+        http_response_code(400);
+        echo json_encode(['message' => 'User does not exist', 'success' => false]);
+        return;
+    }
+    $user = UserController::getUserById($user_id);
+    echo json_encode($user);
+} else if ($method === 'PUT') {
+    $params = ['id', 'firstname', 'lastname', 'email', 'telephone', 'password'];
     foreach ($params as $param) {
-        if (empty($_POST[$param])) {
+        if (empty($data[$param])) {
             http_response_code(400);
-            echo json_encode(['message' => 'Bad Request']);
+            echo json_encode(['message' => "Bad Request $param"]);
             return;
         }
+        $data[$param] = htmlspecialchars($data[$param]);
     }
-    $decoded = getDecodedToken();
-    $firstname = htmlspecialchars($_POST['firstname']);
-    $lastname = htmlspecialchars($_POST['lastname']);
-    $email = htmlspecialchars($_POST['email']);
-    $telephone = htmlspecialchars($_POST['telephone']);
-    $password = htmlspecialchars($_POST['password']);
+
+    $user_id = $data['id'];
+    $firstname = $data['firstname'];
+    $lastname = $data['lastname'];
+    $email = $data['email'];
+    $telephone = $data['telephone'];
+    $password = $data['password'];
 
     // Validating parameters
     if (!preg_match('/^[a-zA-Z]+$/', $firstname) || !preg_match('/^[a-zA-Z]+$/', $lastname)) {
@@ -49,13 +63,13 @@ if($method === 'GET') {
         return;
     }
 
-    if (UserController::checkEmailForUpdate($email, $decoded->user_info)) {
+    if (UserController::checkEmailForUpdate($email, $user_id)) {
         http_response_code(400);
         echo json_encode(['message' => 'User with same email exist', 'success' => false]);
         return;
     }
 
-    if (UserController::checkPhoneForUpdate($telephone, $decoded->user_info)) {
+    if (UserController::checkPhoneForUpdate($telephone, $user_id)) {
         http_response_code(400);
         echo json_encode(['message' => 'User with same phone number exist', 'success' => false]);
         return;
@@ -69,7 +83,7 @@ if($method === 'GET') {
         'password' => $password
     ];
 
-    if (UserController::updateUser($decoded->user_info->id, $data)) {
+    if (UserController::updateUser($user_id, $data)) {
         echo json_encode(['message' => 'User updated successfully', 'success' => true]);
     } else {
         http_response_code(400);
