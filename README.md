@@ -12,3 +12,8 @@ import the database.
 
 create an .env file in the root folder with the following as content :
 JWT_SECRET=COOL_SECRET
+
+run composer command :
+composer install
+
+and voilà.
