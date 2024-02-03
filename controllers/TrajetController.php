@@ -34,4 +34,15 @@ class TrajetController
         $sql = "DELETE FROM trajet WHERE id = $trajet_id AND chauffeur = $user_id";
         return $db->query($sql);
     }
+    public static function updateTrajet($id, array $data): bool
+    {
+        $db = Database::getInstance();
+        $sql = "UPDATE trajet SET ";
+        foreach ($data as $key => $value) {
+            $sql .= "$key = '$value', ";
+        }
+        $sql = rtrim($sql, ', ');
+        $sql .= " WHERE id = $id";
+        return $db->query($sql);
+    }
 }
