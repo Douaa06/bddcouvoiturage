@@ -101,9 +101,9 @@ else if ($method === 'DELETE') {
         echo json_encode(['message' => 'User does not exists', 'success' => false]);
         return;
     }
-    if (!ReservationController::ReservationExist($trajet_id, $user_id)) {
+    if (!ReservationController::pendingReservationExist($trajet_id, $user_id)) {
         http_response_code(400);
-        echo json_encode(['message' => 'You did not reserve this Trajet', 'success' => false]);
+        echo json_encode(['message' => 'You did not ask to reserve this Trajet', 'success' => false]);
         return;
     }
     if (ReservationController::deleteReservation($trajet_id, $user_id)) {

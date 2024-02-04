@@ -59,4 +59,11 @@ class TrajetController
         $sql = "UPDATE trajet SET nbr_place = nbr_place - 1 WHERE id = $trajet_id";
         return $db->query($sql);
     }
+
+    public static function incrementPlaces(mixed $trajet_id): bool
+    {
+        $db = Database::getInstance();
+        $sql = "UPDATE trajet SET nbr_place = nbr_place + 1 WHERE id = $trajet_id";
+        return $db->query($sql);
+    }
 }

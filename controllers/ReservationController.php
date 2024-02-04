@@ -26,10 +26,30 @@ class ReservationController
         return $db->query($sql)->fetch_all();
     }
 
-    public static function ReservationExist(mixed $trajet_id,$passagere): bool
+    public static function getReservationsByUser($passagere): array
     {
         $db = Database::getInstance();
-        $sql = "SELECT * FROM reservation WHERE Trajet = $trajet_id AND Passagere = $passagere";
+        $sql = "SELECT * FROM reservation WHERE Passagere = $passagere AND Approuver = TRUE";
+        return $db->query($sql)->fetch_all();
+    }
+    public static function getReservationsByChauffeur($chauffeur): array
+    {
+        $db = Database::getInstance();
+        $sql = "SELECT * FROM reservation WHERE Trajet in (SELECT id FROM trajet WHERE Chauffeur = $chauffeur) AND Approuver = TRUE";
+        return $db->query($sql)->fetch_all();
+    }
+
+    public static function reservationExist(mixed $trajet_id,$passagere): bool
+    {
+        $db = Database::getInstance();
+        $sql = "SELECT * FROM reservation WHERE Trajet = $trajet_id AND Passagere = $passagere AND Approuver = TRUE";
+        $trajet = $db->query($sql);
+        return $trajet->num_rows > 0;
+    }
+    public static function pendingReservationExist(mixed $trajet_id,$passagere): bool
+    {
+        $db = Database::getInstance();
+        $sql = "SELECT * FROM reservation WHERE Trajet = $trajet_id AND Passagere = $passagere AND Approuver = FALSE";
         $trajet = $db->query($sql);
         return $trajet->num_rows > 0;
     }

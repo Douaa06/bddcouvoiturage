@@ -21,50 +21,8 @@ if ($method === 'GET') {
         echo json_encode(['message' => 'Utilisateur does not exists', 'success' => false]);
         return;
     }
-    $trajets = ReservationController::getPendingReservationsByChauffeur($user_id);
+    $trajets = ReservationController::getReservationsByChauffeur($user_id);
     echo json_encode($trajets);
-}
-else if($method === 'POST') {
-    //Checking if parameters are set
-    $params = ['user_id', 'trajet_id'];
-    foreach ($params as $param) {
-        if (empty($_POST[$param])) {
-            http_response_code(400);
-            echo json_encode(['message' => "Bad Request $param"]);
-            return;
-        }
-    }
-    $user_id = htmlspecialchars($_POST['user_id']);
-    $trajet_id = htmlspecialchars($_POST['trajet_id']);
-
-    if (!UserController::userExist($user_id)) {
-        http_response_code(400);
-        echo json_encode(['message' => 'Utilisateur does not exists', 'success' => false]);
-        return;
-    }
-
-    if (!TrajetController::trajetExist($trajet_id)) {
-        http_response_code(400);
-        echo json_encode(['message' => 'Trajet does not exists', 'success' => false]);
-        return;
-    }
-
-    $trajet = TrajetController::getTrajetById($trajet_id);
-
-    if ($trajet['nbr_place'] <= 0) {
-        http_response_code(400);
-        echo json_encode(['message' => 'Trajet is full', 'success' => false]);
-        return;
-    }
-
-    if (ReservationController::approuveReservation($user_id, $trajet_id) && TrajetController::decrementPlaces($trajet_id)) {
-        http_response_code(200);
-        echo json_encode(['message' => 'Trajet request sent successfully', 'success' => true]);
-    } else {
-        http_response_code(401);
-        echo json_encode(['message' => 'Failed to reserve Trajet', 'success' => false]);
-    }
-
 }
 else if ($method === 'DELETE') {
     $params = ['user_id', 'trajet_id'];
@@ -89,12 +47,12 @@ else if ($method === 'DELETE') {
         echo json_encode(['message' => 'User does not exists', 'success' => false]);
         return;
     }
-    if (!ReservationController::pendingReservationExist($trajet_id, $user_id)) {
+    if (!ReservationController::reservationExist($trajet_id, $user_id)) {
         http_response_code(400);
         echo json_encode(['message' => 'You did not reserve this Trajet', 'success' => false]);
         return;
     }
-    if (ReservationController::deleteReservation($trajet_id, $user_id)) {
+    if (ReservationController::deleteReservation($trajet_id, $user_id) && TrajetController::incrementPlaces($trajet_id)) {
         http_response_code(200);
         echo json_encode(['message' => 'Trajet deleted successfully', 'success' => true]);
     } else {
