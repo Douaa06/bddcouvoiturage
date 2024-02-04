@@ -6,10 +6,10 @@ use Utils\Database;
 
 class ReservationController
 {
-    public static function createReservation($trajet_id,$passagere): bool
+    public static function createReservation($passagere, $trajet): bool
     {
         $db = Database::getInstance();
-        $sql = "INSERT INTO `reservation` ( `Passagere`,`Trajet`, `Approuver`) VALUES ('$passagere', $trajet_id, 0);";
+        $sql = "INSERT INTO reservation VALUES ('$passagere', $trajet, FALSE);";
         return $db->query($sql);
     }
 
@@ -34,7 +34,7 @@ class ReservationController
         return $db->query($sql);
     }
 
-    public static function deleteReservation(mixed $trajet_id, $passagere ): bool
+    public static function deleteReservation(string $trajet_id, string $passagere ): bool
     {
         $db = Database::getInstance();
         $sql = "DELETE FROM reservation WHERE Trajet = $trajet_id AND Passagere = $passagere ";

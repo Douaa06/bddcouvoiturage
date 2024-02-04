@@ -20,7 +20,7 @@ class TrajetController
         return $db->query($sql)->fetch_all();
     }
 
-    public static function trajetExist(mixed $trajet_id): bool
+    public static function trajetExist(string $trajet_id): bool
     {
         $db = Database::getInstance();
         $sql = "SELECT * FROM trajet WHERE id = $trajet_id";
@@ -28,7 +28,7 @@ class TrajetController
         return $trajet->num_rows > 0;
     }
 
-    public static function deleteTrajet(mixed $trajet_id, $user_id): bool
+    public static function deleteTrajet(string $trajet_id, $user_id): bool
     {
         $db = Database::getInstance();
         $sql = "DELETE FROM trajet WHERE id = $trajet_id AND chauffeur = $user_id";
@@ -43,6 +43,20 @@ class TrajetController
         }
         $sql = rtrim($sql, ', ');
         $sql .= " WHERE id = $id";
+        return $db->query($sql);
+    }
+
+    public static function getTrajetById(string $trajet_id)
+    {
+        $db = Database::getInstance();
+        $sql = "SELECT * FROM trajet WHERE id = $trajet_id";
+        return $db->query($sql)->fetch_assoc();
+    }
+
+    public static function addTrajetRequest(string $user_id, string $chauffeur_id, string $trajet_id)
+    {
+        $db = Database::getInstance();
+        $sql = "INSERT INTO reservation VALUES ('$user_id', '$chauffeur_id', '$trajet_id', FALSE);";
         return $db->query($sql);
     }
 }
