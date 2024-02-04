@@ -19,6 +19,12 @@ class ReservationController
         $sql = "SELECT * FROM reservation WHERE Passagere = $passagere";
         return $db->query($sql)->fetch_all();
     }
+    public static function getReservationsByChauffeur($chauffeur): array
+    {
+        $db = Database::getInstance();
+        $sql = "SELECT * FROM reservation WHERE Trajet in (SELECT id FROM trajet WHERE Chauffeur = $chauffeur)";
+        return $db->query($sql)->fetch_all();
+    }
 
     public static function ReservationExist(mixed $trajet_id,$passagere): bool
     {
@@ -27,10 +33,10 @@ class ReservationController
         $trajet = $db->query($sql);
         return $trajet->num_rows > 0;
     }
-    public static function ApprouverReservation($trajet_id,$passagere): bool
+    public static function approuveReservation($trajet_id,$passagere): bool
     {
         $db = Database::getInstance();
-        $sql = "UPDATE reservation SET Approuver=1 WHERE Trajet =$trajet_id and Passagere=$passagere ";
+        $sql = "UPDATE reservation SET Approuver=TRUE WHERE Trajet =$trajet_id and Passagere=$passagere ";
         return $db->query($sql);
     }
 

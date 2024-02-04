@@ -53,10 +53,10 @@ class TrajetController
         return $db->query($sql)->fetch_assoc();
     }
 
-    public static function addTrajetRequest(string $user_id, string $chauffeur_id, string $trajet_id)
+    public static function decrementPlaces(string $trajet_id): bool
     {
         $db = Database::getInstance();
-        $sql = "INSERT INTO reservation VALUES ('$user_id', '$chauffeur_id', '$trajet_id', FALSE);";
+        $sql = "UPDATE trajet SET nbr_place = nbr_place - 1 WHERE id = $trajet_id";
         return $db->query($sql);
     }
 }
