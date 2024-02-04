@@ -21,7 +21,7 @@ if ($method === 'GET') {
         echo json_encode(['message' => 'Utilisateur does not exists', 'success' => false]);
         return;
     }
-    $trajets = ReservationController::getReservationsByUser($user_id);
+    $trajets = ReservationController::getPendingReservationsByUser($user_id);
     echo json_encode($trajets);
 }
 else if($method === 'POST') {

@@ -13,16 +13,16 @@ class ReservationController
         return $db->query($sql);
     }
 
-    public static function getReservationsByUser($passagere): array
+    public static function getPendingReservationsByUser($passagere): array
     {
         $db = Database::getInstance();
-        $sql = "SELECT * FROM reservation WHERE Passagere = $passagere";
+        $sql = "SELECT * FROM reservation WHERE Passagere = $passagere AND Approuver = FALSE";
         return $db->query($sql)->fetch_all();
     }
-    public static function getReservationsByChauffeur($chauffeur): array
+    public static function getPendingReservationsByChauffeur($chauffeur): array
     {
         $db = Database::getInstance();
-        $sql = "SELECT * FROM reservation WHERE Trajet in (SELECT id FROM trajet WHERE Chauffeur = $chauffeur)";
+        $sql = "SELECT * FROM reservation WHERE Trajet in (SELECT id FROM trajet WHERE Chauffeur = $chauffeur) AND Approuver = FALSE";
         return $db->query($sql)->fetch_all();
     }
 
